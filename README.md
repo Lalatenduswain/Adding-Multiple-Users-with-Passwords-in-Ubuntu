@@ -20,7 +20,7 @@ To use the script, follow these steps:
 2. Navigate to the script's directory:
 
    ```bash
-   cd user-management-script
+   cd Adding-Multiple-Users-with-Passwords-in-Ubuntu
    ```
 
 3. Make the script executable:
