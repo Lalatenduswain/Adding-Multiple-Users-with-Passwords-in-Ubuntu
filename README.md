@@ -32,7 +32,7 @@ To use the script, follow these steps:
 4. Run the script as root:
 
    ```bash
-   sudo ./user_management.sh
+   ./user_management.sh
    ```
 
 5. Choose an action from the provided menu:
