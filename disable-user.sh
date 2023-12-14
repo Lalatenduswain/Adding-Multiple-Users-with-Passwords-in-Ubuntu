@@ -18,7 +18,7 @@ add_users_from_file() {
     while IFS=' ' read -r username password || [[ -n "$username" ]]; do
         # Add the user with /bin/bash as the default shell
         useradd -m -s /bin/bash "$username"
-    
+
         # Set the user's password
         echo "$username:$password" | chpasswd
 
@@ -78,6 +78,11 @@ add_single_user() {
 
 # Function to display manually added users and remove a user
 remove_user() {
+    echo "Choose an action:"
+    echo "1) Remove a user"
+    echo "2) Disable a user"
+    read -p "Enter your choice (1/2): " action
+
     echo "Manually added users on the system (UID >= 1000):"
     IFS=$'\n' read -r -d '' -a users < <( getent passwd | awk -F: '($3 >= 1000) && ($1 != "nobody") { print $1 }' && printf '\0' )
 
@@ -90,14 +95,14 @@ remove_user() {
         echo "$((i+1))) ${users[i]}"
     done
 
-    echo "Enter the number of the user you want to remove:"
+    echo "Enter the number of the user you want to $([ "$action" == "1" ] && echo "remove" || echo "disable"):"
     read number
 
     selected_user="${users[number-1]}"
 
     if [ -n "$selected_user" ]; then
-        echo "Removing user: $selected_user"
-        userdel -r "$selected_user" 2>/dev/null
+        echo "$([ "$action" == "1" ] && echo "Removing" || echo "Disabling") user: $selected_user"
+        $([ "$action" == "1" ] && echo "userdel -r" || echo "passwd -l") "$selected_user" 2>/dev/null
     else
         echo "Invalid selection."
     fi
